@@ -1,3 +1,5 @@
+use ferris_says::say;
+
 pub struct JokeFlags {
     nsfw: bool,
     religious: bool,
@@ -192,4 +194,26 @@ impl Joke {
 
         return start + additional_data.as_str() + end.as_str();
     }
+
+    pub fn full_joke(&self) -> String {
+        match self.data.clone() {
+            JokeData::Single { joke } => joke,
+            JokeData::TwoPart { setup, delivery } => setup + "\n" + delivery.as_str(),
+        }
+    }
+
+    pub fn ferris_delivery(&self) {
+        let introduction = format!(
+            "Here's a {} joke for you.\n Joke number {}...",
+            self.category, self.id
+        );
+        ferris_say(introduction);
+        ferris_say(self.full_joke());
+    }
+}
+
+fn ferris_say(message: String) {
+    let width = message.chars().count();
+    let mut writer = std::io::BufWriter::new(std::io::stdout().lock());
+    say(&message, width, &mut writer).unwrap();
 }

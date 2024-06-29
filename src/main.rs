@@ -11,7 +11,7 @@ fn main() {
         if error.len() > 2 {
             println!("Error - {error}");
         } else {
-            println!("{}", joke.to_string());
+            joke.ferris_delivery();
         }
     });
 }
